@@ -1,20 +1,22 @@
 import express from "express";
+import { errorMiddleware } from "./middlewares/error-middleware";
 
 const app = express();
 const port = 3000;
 
-// route
-const jobRoute = require('./routes/job');
-const authRoute = require('./routes/auth');
-const applyRoute = require('./routes/apply');
-
 app.use(express.json())
 
+// route
+const jobRoute = require('./routes/job');
+const authRoute = require('./routes/user');
+const applyRoute = require('./routes/apply');
 
 // use route
-app.use('/job', jobRoute);
-app.use('/auth', authRoute);
-app.use('/apply', applyRoute);
+app.use('/api/job', jobRoute);
+app.use('/api/user', authRoute);
+app.use('/api/apply', applyRoute);
+
+app.use(errorMiddleware)
 
 app.listen(port, () => {
     console.log(`app listening on port ${port}`);
