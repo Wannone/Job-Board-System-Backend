@@ -3,7 +3,7 @@ import { JobService } from '../service/jobs-service';
 import { JobData } from '../models/job';
 
 export class JobsController {
-    static async getAll(req: Request, res: Response, next: NextFunction) {
+    static async getAll(req:Request, res: Response, next: NextFunction) {
         try {
             const response = await JobService.getAll();
             res.status(200).send(response)
@@ -15,6 +15,15 @@ export class JobsController {
     static async getById(req: Request, res: Response, next: NextFunction) {
         try {
             const response = await JobService.getById(Number(req.params.id));
+            res.status(200).send(response)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    static async getByRecId(req: Request, res: Response, next: NextFunction) {
+        try {
+            const response = await JobService.getByRecId(Number(req.user.id));
             res.status(200).send(response)
         } catch (error) {
             next(error)

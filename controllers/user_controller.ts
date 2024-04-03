@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response, response } from 'express';
 import { AppRegist, RecRegist, UserLogin } from '../models/user';
 import { UserService } from '../service/user-service';
 
@@ -7,7 +7,7 @@ export class UserController {
         try{
             const Request: UserLogin = req.body as UserLogin;
             const response = await UserService.login(Request);
-            res.status(200).send({ message: "User logged in successfully", data: response});
+            res.status(200).send(response);
         }catch(error){
             next(error)
         }
@@ -17,7 +17,7 @@ export class UserController {
         try {
             const request: AppRegist = req.body as AppRegist;
             const response = await UserService.registerApplicant(request); 
-            res.status(200).send({ message: "User registered successfully", data: response});
+            res.status(200).send(response);
         } catch (error) {
             next(error)
         }
@@ -26,8 +26,8 @@ export class UserController {
     static async registerRecruiters(req: Request, res: Response, next: NextFunction) {
         try {
             const request: RecRegist = req.body as RecRegist;
-            const reponse = await UserService.registerRecruiter(request);
-            res.status(200).send({ message: "User registered successfully", data: reponse});
+            const response = await UserService.registerRecruiter(request);
+            res.status(200).send(response);
         } catch (error) {
             next(error)
         }

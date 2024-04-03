@@ -16,6 +16,12 @@ export class JobService {
         return job[0] as Job;
     }
 
+    static async getByRecId(request: number): Promise<Job[]> {
+        const [job] = await pool.query<RowDataPacket[]>(`SELECT * FROM jobs WHERE rec_id = ?`, [request])
+        if (job.length === 0) throw new Error("No job found");
+        return job as Job[];
+    }
+
     static async search(request: string): Promise<Job[]> {
         const [job] = await pool.query<RowDataPacket[]>(
             "SELECT * FROM jobs WHERE title LIKE ? OR description LIKE ? OR requirement LIKE ? OR location LIKE ? OR company LIKE ?", 
@@ -50,6 +56,7 @@ export class JobService {
                         WHERE id = ?`,
                     [request.title, request.description, request.requirement, request.company, request.location, id]
                 );
+                
                 return {
                     id: id,
                     title: request.title,
@@ -66,8 +73,8 @@ export class JobService {
 
     static async delete(id: number, recId: number): Promise<Job> {
         const [data] = await pool.query<RowDataPacket[]>(`SELECT rec_id FROM jobs WHERE id = ?`, [id]);
-
             if (data[0].rec_id === recId) {
+                await pool.query(`DELETE FROM apply_jobs WHERE jobs_id = ?`, [id]);
                 await pool.query(`DELETE FROM jobs WHERE id = ?`, [id]);
                 return {
                     id: id,

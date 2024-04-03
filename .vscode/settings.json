@@ -1,0 +1,6 @@
+{
+    "workbench.editor.showTabs": "single",
+    "workbench.editor.tabSizing": "shrink",   
+    "editor.fontFamily": "'Fira Code', Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontLigatures": true,
+}
